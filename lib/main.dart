@@ -10,6 +10,7 @@ class AnimationApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MyHomePage(),
     );
   }
@@ -25,16 +26,27 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-  late Animation<double> _animation;
+  late Animation<double> _opacityAnimation;
+  late Animation<double> _sizeAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 10),
+      duration: const Duration(seconds: 4),
     );
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
+
+    // Opacity animation from fully visible to invisible
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    // Size animation from scale 1 to scale 4
+    _sizeAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
     _controller.repeat(reverse: true);
   }
 
@@ -48,16 +60,21 @@ class _MyHomePageState extends State<MyHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Animation Example'),
+        title: const Text('Animation Example'),
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: _animation,
+          animation: _controller,
           builder: (context, child) {
-            return Transform.scale(
-                scale: _animation.value,
+            return Opacity(
+              opacity: _opacityAnimation.value,
+              child: Transform.scale(
+                scale: _sizeAnimation.value,
                 child: Image.asset(
-                    '/Users/benjamingayda-knop/Coden/Projects/animation_example_1/assets/images/Aldi-Pc-Bild.webp'));
+                  'assets/images/Aldi-Pc-Bild.webp',
+                ),
+              ),
+            );
           },
         ),
       ),
