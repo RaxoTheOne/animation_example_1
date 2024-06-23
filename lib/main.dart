@@ -16,5 +16,3 @@ class AnimationApp extends StatelessWidget {
     );
   }
 }
-
-
