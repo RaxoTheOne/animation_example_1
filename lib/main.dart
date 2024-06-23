@@ -16,14 +16,30 @@ class AnimationApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({super.key});
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Animation Example'),
+      ),
+      body: const Center(
+        child: AnimatedImage(),
+      ),
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage>
+class AnimatedImage extends StatefulWidget {
+  const AnimatedImage({super.key});
+
+  @override
+  _AnimatedImageState createState() => _AnimatedImageState();
+}
+
+class _AnimatedImageState extends State<AnimatedImage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
@@ -37,13 +53,11 @@ class _MyHomePageState extends State<MyHomePage>
       duration: const Duration(seconds: 4),
     );
 
-    // Opacity animation from fully visible to invisible
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    // Size animation from scale 1 to scale 4
-    _sizeAnimation = Tween<double>(begin: 0.0, end: 2.0).animate(
+    _sizeAnimation = Tween<double>(begin: 1.0, end: 2.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
@@ -58,26 +72,19 @@ class _MyHomePageState extends State<MyHomePage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Animation Example'),
-      ),
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            return Opacity(
-              opacity: _opacityAnimation.value,
-              child: Transform.scale(
-                scale: _sizeAnimation.value,
-                child: Image.asset(
-                  'assets/images/Aldi-Pc-Bild.webp',
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Opacity(
+          opacity: _opacityAnimation.value,
+          child: Transform.scale(
+            scale: _sizeAnimation.value,
+            child: Image.asset(
+              'assets/images/Aldi-Pc-Bild.webp',
+            ),
+          ),
+        );
+      },
     );
   }
 }
