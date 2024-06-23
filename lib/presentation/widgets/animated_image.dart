@@ -13,6 +13,7 @@ class _AnimatedImageState extends State<AnimatedImage>
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _sizeAnimation;
+  bool isAnimating = true;
 
   @override
   void initState() {
@@ -25,6 +26,17 @@ class _AnimatedImageState extends State<AnimatedImage>
     _controller.repeat(reverse: true);
   }
 
+  void _toggleAnimation() {
+    setState(() {
+      if (isAnimating) {
+        _controller.stop();
+      } else {
+        _controller.repeat(reverse: true);
+      }
+      isAnimating = !isAnimating;
+    });
+  }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -33,19 +45,29 @@ class _AnimatedImageState extends State<AnimatedImage>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return Opacity(
-          opacity: _opacityAnimation.value,
-          child: Transform.scale(
-            scale: _sizeAnimation.value,
-            child: Image.asset(
-              'assets/images/Aldi-Pc-Bild.webp',
-            ),
-          ),
-        );
-      },
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return Opacity(
+              opacity: _opacityAnimation.value,
+              child: Transform.scale(
+                scale: _sizeAnimation.value,
+                child: Image.asset(
+                  'assets/images/Aldi-Pc-Bild.webp',
+                ),
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _toggleAnimation,
+          child: Text(isAnimating ? 'Stop Animation' : 'Start Animation'),
+        ),
+      ],
     );
   }
 }
