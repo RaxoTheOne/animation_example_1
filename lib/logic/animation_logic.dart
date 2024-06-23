@@ -22,4 +22,10 @@ class AnimationLogic {
       CurvedAnimation(parent: controller, curve: Curves.easeInOut),
     );
   }
+
+  Animation<double> createRotationAnimation() {
+    return Tween<double>(begin: 0.0, end: 2 * 3.141592653589793).animate(
+      CurvedAnimation(parent: controller, curve: Curves.easeInOut),
+    );
+  }
 }

@@ -13,6 +13,7 @@ class _AnimatedImageState extends State<AnimatedImage>
   late AnimationController _controller;
   late Animation<double> _opacityAnimation;
   late Animation<double> _sizeAnimation;
+  late Animation<double> _rotationAnimation;
   bool isAnimating = true;
 
   @override
@@ -22,6 +23,7 @@ class _AnimatedImageState extends State<AnimatedImage>
     _controller = animationLogic.controller;
     _opacityAnimation = animationLogic.createOpacityAnimation();
     _sizeAnimation = animationLogic.createSizeAnimation();
+    _rotationAnimation = animationLogic.createRotationAnimation();
 
     _controller.repeat(reverse: true);
   }
@@ -53,8 +55,11 @@ class _AnimatedImageState extends State<AnimatedImage>
           builder: (context, child) {
             return Opacity(
               opacity: _opacityAnimation.value,
-              child: Transform.scale(
-                scale: _sizeAnimation.value,
+              child: Transform(
+                alignment: Alignment.center,
+                transform: Matrix4.identity()
+                  ..rotateZ(_rotationAnimation.value)
+                  ..scale(_sizeAnimation.value),
                 child: Image.asset(
                   'assets/images/Aldi-Pc-Bild.webp',
                 ),
