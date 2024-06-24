@@ -61,7 +61,7 @@ class _AnimatedImageState extends State<AnimatedImage>
                   ..rotateZ(_rotationAnimation.value)
                   ..scale(_sizeAnimation.value),
                 child: Image.asset(
-                  'assets/images/Aldi-Pc-Bild.webp',
+                  'assets/images/71Av+tAu-vL._AC_SL1500_.jpg',
                 ),
               ),
             );
